@@ -27,8 +27,8 @@ public class menumgr
 
     public boolean loadLevel(int level)
     {
-       System.out.println("Loading level:" + currentLevel);
-       System.out.println("\n ----------------------------\n");
+       // System.out.println("Loading level:" + currentLevel);
+       System.out.println("\n -------------------------------\n");
         switch (currentLevel)
         {
             case -1:
@@ -99,52 +99,29 @@ public class menumgr
 
           int iSel = Integer.parseInt(result);
           System.out.println("\nYour Selection was: " + result);
-          // currentCategoryName = categories.get(iSel);
-          // System.out.println("\nYour Selection was:" + currentCategoryName);
+
       }
     }
 
     public void PasswordMenu()
     {
       Scanner reader = new Scanner(System.in);
-      // menu m = new menu();
-      // List<String> categories = controller.getCategories();
-      // m.loadMenu(categories);
-      // m.addMenuItem("'q' to Quit");
-      System.out.println("\nEnter your password");
-      // m.printMenu();
+
+      System.out.println("\nEnter your password (press 'q' to quit)");
+
       String s = reader.next();
 
-      if (s == "1234"){
+      if (Objects.equals(s,"1234")){
         System.out.println("\nAuthenticated!");
         currentLevel++;
       }
+      if (Objects.equals(s,"q")){
+        currentLevel--;
+      }
       else {
         System.out.println("\nYour password was incorrect");
-        currentLevel++;
       }
-      // reader.close();
-      // String result = "0";
-      // try
-      // {
-      //     result = m.getSelection();
-      // }
-      // catch (Exception e)
-      // {
-      //     result = "q";
-      // }
-      // if (Objects.equals(result,"q"))
-      // {
-      //     currentLevel--;
-      // }
-      // else
-      // {
-      //     currentLevel++;
-      //     int iSel = Integer.parseInt(result);
-      //
-      //     // currentCategoryName = categories.get(iSel);
-      //     System.out.println("\nYour Selection was:" + currentCategoryName);
-      // }
+
     }
 
     public void SupplierMenu()
@@ -254,9 +231,7 @@ public class menumgr
     {
         menu m = new menu();
 
-        //items it = new items("orderSys/" + currentCategory.getName());
 
-        // List<item> itemList = controller.getProducts(currentCategoryName);
         List<String> itemList = controller.getProducts(currentCategoryName);
         List<String> l = new ArrayList<>();
         System.out.println("");
@@ -273,8 +248,7 @@ public class menumgr
         {
             int iSel = Integer.parseInt(result);//Item  selected
             currentItemName = itemList.get(iSel);
-            //currentItem = itemList.get(iSel);
-            //Now read the file and print the org.rit.swen440.presentation.items in the catalog
+
             System.out.println("You want item from the catalog: " + currentItemName);
         }
         catch (Exception e)
@@ -285,16 +259,10 @@ public class menumgr
             currentLevel-=2;
         else
         {
-            //currentLevel++;//Or keep at same level?
             OrderQty(currentCategoryName, currentItemName);
         }
     }
 
-
-    // public void Level2()
-    // {
-    //
-    // }
 
     public void OrderQty(String category, String item)
     {
