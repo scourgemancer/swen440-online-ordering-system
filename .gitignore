@@ -66,3 +66,7 @@ nb-configuration.xml
 ## OS X
 ##########################
 .DS_Store
+<<<<<<< HEAD
+=======
+orderSys.properties
+>>>>>>> b47ff832615673f9e6460dc1c96ecf171fb28bd8
