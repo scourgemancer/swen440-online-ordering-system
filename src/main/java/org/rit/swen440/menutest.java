@@ -11,7 +11,7 @@ public class menutest
     {
         try {
             System.getProperties().load(new FileInputStream("orderSys.properties"));
-            System.out.println("Hello");
+            System.out.println("Welcome to Hippolyta.com!");
             menumgr mgr = new menumgr();
             int currentLevel = 0;
             boolean done = false;
