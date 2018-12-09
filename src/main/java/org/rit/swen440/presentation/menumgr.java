@@ -115,7 +115,7 @@ public class menumgr
         System.out.println("\nAuthenticated!");
         currentLevel++;
       }
-      if (Objects.equals(s,"q")){
+      else if (Objects.equals(s,"q")){
         currentLevel--;
       }
       else {
