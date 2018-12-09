@@ -51,49 +51,17 @@ and a better final grade.
  - Lombok Library: Lombok annotations are used in places to auto-generate getters and
  setters.  
  - JUnit Library:  Included but never used.
+ - MySql: will need to install mysql commmandline to create the server
 
 ### Building
 The development team choose Maven as their build tool.  Maven 3.1.0 and 3.3.9
 have both been successfully used.  
 
-With Maven installed, running **mvn clean install** from the root install directory should 
-successfully build the program.  It is expected that every build will also execute the test
-lifecycle ensuring that unit tests all still pass.
 
-### Testing
-The development team pushed developing unit tests to the
- end of their development cycle.  As is often the case, this was a poor
- decision.  Time was never allocated and no tests were written.
- 
-The stakeholders have high hopes that the new _Crack Teams_ taking over
-the project have a better sense of the importance of unit testing
-and deliver code with good unit tests and high coverage.  
+With Maven installed, 
+	run mvn package from the root install directory
+
 
 ## Running the Online Ordering System
-The previous team left no written instructions on how to run the system, other than it appears the main app runs via menutest.
-Management sincerely hopes the new teams understand the importance of good
-documentation and provide this critical piece of information.
+	type run.sh or start.sh in command prompt from the root install directory
 
-### orderSys.properties
-One additional piece of information that has proved crucial to successfully running
-the application is correctly setting the property fil.  The default location is:
-
-`fileSystemRoot=c:/Users/wstumbo/orderSys`
-
-Which nicely reflects were the orderSys data files were on a lackey developer's machine.  You'll 
-want to update this value to reflect your own installation.  The orderSys data files are provided
-as part of the zip file delivered on myCourses.  The value you will need will be something along
-the following lines:
-
-`fileSystemRoot=<location where you installed Project 2>/Project2/orderSys`
-
-So, for instance if you installed in the your Users directory in Windows:
-
-`fileSystemRoot=`**path to project**`/Project2/orderSys`
-
- 
-**It should be noted that a large part of the compensation for working on
-this project is dependent on the management team being able to evaluate it.
-A key part of evaluation will be installing, building and running the 
-system you produce.
-Additionally, explaining architecture choices going forward is essential.**
