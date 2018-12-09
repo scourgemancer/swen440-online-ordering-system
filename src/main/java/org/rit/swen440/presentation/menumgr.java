@@ -265,7 +265,8 @@ public class menumgr
 		else if (result.equals("log")){
 			List<String> logs = controller.getLogs();
 			System.out.println();
-			for (int i = 0; i <= logs.size(); i++){
+			int i = 0;
+			while(i < logs.size()){
 				System.out.println("Product: " + logs.get(i) + " Amount: " + logs.get(i+1) + " Type: " + logs.get(i+2));
 				i = i + 3;
 			}
