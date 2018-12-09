@@ -205,6 +205,7 @@ public class menumgr
         System.out.println("The following supplier items are available for update");
         m.printMenu();
         System.out.println("Type 'new' if you would you like to add a new product");
+		System.out.println("Type 'log' to view product logs");
         String result = m.getSelection();
         try
         {
@@ -245,6 +246,17 @@ public class menumgr
             //make sure to normalize category into foreign key
             controller.addProduct(sku, count, threshold, amount, title, description, cost, category);
         }
+		else if (result.equals("log")){
+			List<String> logs = controller.getLogs();
+			System.out.println();
+			for (int i = 0; i <= logs.size(); i++){
+				System.out.println("Product: " + logs.get(i) + " Amount: " + logs.get(i+1) + " Type: " + logs.get(i+2));
+				i = i + 3;
+			}
+			System.out.println("");
+			System.out.println("Press Enter to continue");
+			m.getSelection();
+		}
         else
         {
             //currentLevel++;//Or keep at same level?
