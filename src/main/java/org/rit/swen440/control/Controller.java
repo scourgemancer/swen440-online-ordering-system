@@ -343,6 +343,8 @@ public class Controller {
 		preparedStatement.setInt(1, amount);
 		preparedStatement.setString(2, name);
 		preparedStatement.executeUpdate();
+        int sku = getSkuCode(name);
+        logAction(sku, amount, "Customer", "purchase");
 	} catch(Exception e) {
 		System.err.println(e);
 	} finally {
@@ -357,6 +359,8 @@ public class Controller {
 		preparedStatement.setInt(1, amount);
 		preparedStatement.setString(2, name);
 		preparedStatement.executeUpdate();
+		int sku = getSkuCode(name);
+		logAction(sku, amount, "Supplier", "supply");
 	} catch(Exception e) {
 		System.err.println(e);
 	} finally {
@@ -376,7 +380,7 @@ public class Controller {
             preparedStatement.setDouble(7,cost);
             preparedStatement.setInt(8, category);
             preparedStatement.executeUpdate();
-            logAction(sku, count, "Supplier", "supply");
+            logAction(sku, count, "Supplier", "create");
         } catch(Exception e) {
             System.err.println(e);
         } finally {
@@ -402,5 +406,24 @@ public class Controller {
         } finally {
             close();
         }
+    }
+
+    //given a product name return its SKU
+    //this is helpful when logging items
+    public int getSkuCode(String title){
+        try {
+            connection = DriverManager.getConnection(jdbcURL);
+            preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
+            preparedStatement.setString(1, title);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                return Integer.parseInt(resultSet.getString("sku_code"));
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            close();
+        }
+        return -1;
     }
 }
