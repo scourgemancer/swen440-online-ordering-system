@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -47,7 +48,7 @@ public class Controller {
   private ResultSet resultSet;
 
   public Controller(String directory) {
-    loadCategories(directory);
+    //loadCategories(directory);
   }
 
   /**
@@ -70,6 +71,7 @@ public class Controller {
 	} finally {
 		close();
 	}
+      return null;
   }
 
   /**
@@ -83,13 +85,14 @@ public class Controller {
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery("select * from category WHERE Name='" + category + "'");
 		while(resultSet.next()) {
-			return resultSet.getString("description"));
+			return resultSet.getString("description");
 		}
 	} catch(Exception e) {
 		System.err.println(e);
 	} finally {
 		close();
 	}
+      return null;
   }
 
   /**
@@ -113,6 +116,7 @@ public class Controller {
 	} finally {
 		close();
 	}
+	return null;
   }
 
 
@@ -124,7 +128,7 @@ public class Controller {
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
 		while(resultSet.next()) {
-			return resultSet.getString("name"));
+			return resultSet.getString("name");
 		}
 	} catch(Exception e) {
 		System.err.println(e);
@@ -137,7 +141,7 @@ public class Controller {
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
 		while(resultSet.next()) {
-			return resultSet.getString("description"));
+			return resultSet.getString("description");
 		}
 	} catch(Exception e) {
 		System.err.println(e);
@@ -151,7 +155,7 @@ public class Controller {
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
 		while(resultSet.next()) {
-			return resultSet.getString("cost"));
+			return resultSet.getString("cost");
 		}
 	} catch(Exception e) {
 		System.err.println(e);
@@ -165,7 +169,7 @@ public class Controller {
 		statement = connection.createStatement();
 		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
 		while(resultSet.next()) {
-			return resultSet.getString("item_count"));
+			return resultSet.getString("item_count");
 		}
 	} catch(Exception e) {
 		System.err.println(e);
@@ -183,21 +187,21 @@ public class Controller {
    * @param name
    * @return Category, if present
    */
-  public Optional<Category> findCategory(String name) {
-    return categories.stream()
-        .filter(c -> c.getName().equalsIgnoreCase(name))
-        .findFirst();
-  }
+//  public Optional<Category> findCategory(String name) {
+//    return categories.stream()
+//        .filter(c -> c.getName().equalsIgnoreCase(name))
+//        .findFirst();
+//  }
 
   /**
    * Loop through all our categories and write any product records that
    * have been updated.
    */
-  public void writeCategories() {
-    for (Category category: categories) {
-      writeProducts(category.getProducts());
-    }
-  }
+//  public void writeCategories() {
+//    for (Category category: categories) {
+//      writeProducts(category.getProducts());
+//    }
+//  }
 
   /* -----------------------------------
    *
@@ -237,9 +241,9 @@ public class Controller {
     return Optional.empty();
   }
 
-  private Optional<Product> getProduct(String category, String product) {
-    return findCategory(category).map(c -> c.findProduct(product)).orElse(null);
-  }
+//  private Optional<Product> getProduct(String category, String product) {
+//    return findCategory(category).map(c -> c.findProduct(product)).orElse(null);
+//  }
 
   /**
    * Parse a subdirectory and create a product object for each product within it

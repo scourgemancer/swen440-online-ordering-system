@@ -20,8 +20,8 @@ public class menutest
 
             System.out.println("Thank you for shopping at Hippolyta.com!");
 
-        } catch(IOException e) {
-            System.err.println("orderSys.properties not found.");
+        } catch(Exception e) {
+            System.err.println(e);
         }
 
     }
