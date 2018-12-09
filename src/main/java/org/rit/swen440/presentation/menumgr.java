@@ -161,7 +161,7 @@ public class menumgr
         List<String> categories = controller.getCategories();
         m.loadMenu(categories);
         m.addMenuItem("'q' to Quit");
-        System.out.println("\nThe following categories are available");
+        System.out.println("\nThe following categories are availableries");
         m.printMenu();
         String result = "0";
         try

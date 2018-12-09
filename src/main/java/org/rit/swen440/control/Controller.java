@@ -106,9 +106,9 @@ public class Controller {
 		ArrayList<String> products = new ArrayList<>();
 		connection = DriverManager.getConnection(jdbcURL);
 		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE category='" + categoryName + "'");
+		resultSet = statement.executeQuery("SELECT * FROM category inner join product on category.id = product.category where category.name = '" + categoryName + "'");
 		while(resultSet.next()) {
-			products.add(resultSet.getString("name"));
+			products.add(resultSet.getString("Title"));
 		}
 		return products;
 	} catch(Exception e) {
@@ -126,9 +126,9 @@ public class Controller {
 	   try {
 		connection = DriverManager.getConnection(jdbcURL);
 		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
 		while(resultSet.next()) {
-			return resultSet.getString("name");
+			return resultSet.getString("Title");
 		}
 	} catch(Exception e) {
 		System.err.println(e);
@@ -139,7 +139,7 @@ public class Controller {
          try {
 		connection = DriverManager.getConnection(jdbcURL);
 		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
 		while(resultSet.next()) {
 			return resultSet.getString("description");
 		}
@@ -153,7 +153,7 @@ public class Controller {
 	   try {
 		connection = DriverManager.getConnection(jdbcURL);
 		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
 		while(resultSet.next()) {
 			return resultSet.getString("cost");
 		}
@@ -167,7 +167,7 @@ public class Controller {
        try {
 		connection = DriverManager.getConnection(jdbcURL);
 		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
 		while(resultSet.next()) {
 			return resultSet.getString("item_count");
 		}
