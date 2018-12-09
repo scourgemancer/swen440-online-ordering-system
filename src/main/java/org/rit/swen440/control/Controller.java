@@ -9,12 +9,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 
 /**
  * Controls access to data, on start-up scans directories and builds internal
@@ -350,6 +346,27 @@ public class Controller {
             preparedStatement.setString(6, description);
             preparedStatement.setDouble(7,cost);
             preparedStatement.setInt(8, category);
+            preparedStatement.executeUpdate();
+            logAction(sku, count, "Supplier", "supply");
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            close();
+        }
+    }
+
+    public void logAction(int sku, int quantity, String Utype, String type){
+        try {
+            connection = DriverManager.getConnection(jdbcURL);
+            preparedStatement = connection.prepareStatement("INSERT INTO log VALUES (NULL, ?, ?, ?, ?, ?)");
+            Date dNow = new Date( );
+            SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd'T'hh:mm:ss");
+            String dateS = ft.format(dNow);
+            preparedStatement.setString(1, dateS);
+            preparedStatement.setInt(2, sku);
+            preparedStatement.setInt(3, quantity);
+            preparedStatement.setString(4, Utype);
+            preparedStatement.setString(5, type);
             preparedStatement.executeUpdate();
         } catch(Exception e) {
             System.err.println(e);
