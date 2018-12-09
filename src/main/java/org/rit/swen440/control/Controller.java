@@ -70,6 +70,26 @@ public class Controller {
       return null;
   }
 
+  public List<String> getLogs() {
+	try {
+		List<String> categories = new ArrayList<>();
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from log inner join product on product.SKU_code = log.SKU_code");
+		while(resultSet.next()) {
+			categories.add(resultSet.getString("Title"));
+			categories.add(resultSet.getString("quantity"));
+			categories.add(resultSet.getString("Type"));
+		}
+		return categories;
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
+      return null;
+  }
+
   /**
    * Get the description of the named category
    * @param category name
