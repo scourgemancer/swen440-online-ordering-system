@@ -67,3 +67,6 @@ With Maven installed,
 ## Running the Online Ordering System
 	type run.sh or start.sh in the command prompt from the root install directory
 
+## Notes
+	Supplier Password is 1234
+
