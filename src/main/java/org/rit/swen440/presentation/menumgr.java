@@ -213,7 +213,7 @@ public class menumgr
                 currentItemName = itemList.get(iSel);
                 //currentItem = itemList.get(iSel);
                 //Now read the file and print the org.rit.swen440.presentation.items in the catalog
-                System.out.println("You want item from the catalog: " + currentItemName);
+                System.out.println("You've selected: " + currentItemName);
             }
         }
         catch (Exception e)
@@ -274,7 +274,7 @@ public class menumgr
             int iSel = Integer.parseInt(result);//Item  selected
             currentItemName = itemList.get(iSel);
 
-            System.out.println("You want item from the catalog: " + currentItemName);
+            System.out.println("You've selected: " + currentItemName);
         }
         catch (Exception e)
         {
@@ -302,18 +302,26 @@ public class menumgr
         System.out.print(": ");
         menu m = new menu();
         String result = m.getSelection();
+        //Boolean didBuy = false;
 		try{
 			if(isSupplier){
 				controller.supplyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
+                System.out.println("You added: " + result);
 			}
-			else{
-				controller.buyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
-			}
+			else {
+                int stock = Integer.parseInt(controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.INVENTORY));
+                if (stock - Integer.parseInt(result) < 0) {
+                    System.out.println("Sorry that request exceeds available inventory.");
+                } else {
+                    controller.buyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
+                    System.out.println("You ordered: " + result);
+                }
+            }
 		}
 		catch(NumberFormatException e){
 			System.out.println("Please insert a number");
 			return ;
 		}
-        System.out.println("You ordered: " + result);
+
     }
 }
