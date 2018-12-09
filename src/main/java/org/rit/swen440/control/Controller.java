@@ -338,4 +338,33 @@ public class Controller {
 	    if(connection!=null) connection.close();
 	  } catch(Exception e){}
 	}
+
+  public void buyItems(int amount, String name){
+	try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		preparedStatement = connection.prepareStatement("update product set Item_Count = Item_Count - ? WHERE Title=?");
+		preparedStatement.setInt(1, amount);
+		preparedStatement.setString(2, name);
+		preparedStatement.executeUpdate();
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
+  }
+  public void supplyItems(int amount, String name){
+	try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		preparedStatement = connection.prepareStatement("update product set Item_Count = Item_Count + ? WHERE Title=?");
+		preparedStatement.setInt(1, amount);
+		preparedStatement.setString(2, name);
+		preparedStatement.executeUpdate();
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
+  }
 }
