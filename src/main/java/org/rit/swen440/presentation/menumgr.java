@@ -115,7 +115,7 @@ public class menumgr
         System.out.println("\nAuthenticated!");
         currentLevel++;
       }
-      if (Objects.equals(s,"q")){
+      else if (Objects.equals(s,"q")){
         currentLevel--;
       }
       else {
@@ -161,7 +161,7 @@ public class menumgr
         List<String> categories = controller.getCategories();
         m.loadMenu(categories);
         m.addMenuItem("'q' to Quit");
-        System.out.println("\nThe following categories are availableries");
+        System.out.println("\nThe following categories are available");
         m.printMenu();
         String result = "0";
         try
