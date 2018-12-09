@@ -248,7 +248,7 @@ public class menumgr
         else
         {
             //currentLevel++;//Or keep at same level?
-            OrderQty(currentCategoryName, currentItemName);
+            OrderQty(currentCategoryName, currentItemName, true);
         }
     }
 
@@ -284,19 +284,36 @@ public class menumgr
             currentLevel-=2;
         else
         {
-            OrderQty(currentCategoryName, currentItemName);
+            OrderQty(currentCategoryName, currentItemName, false);
         }
     }
 
 
-    public void OrderQty(String category, String item)
+    public void OrderQty(String category, String item, boolean isSupplier)
     {
-        System.out.println("Please select a quantity");
+		if(isSupplier){
+			System.out.println("Enter amount to add...");
+		}
+		else{
+			System.out.println("Enter amount to buy...");
+		}
         System.out.println(controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME) +
-                " availability:" + controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.INVENTORY));
-        System.out.print(":");
+                " availability: " + controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.INVENTORY));
+        System.out.print(": ");
         menu m = new menu();
         String result = m.getSelection();
-        System.out.println("You ordered:" + result);
+		try{
+			if(isSupplier){
+				controller.supplyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
+			}
+			else{
+				controller.buyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
+			}
+		}
+		catch(NumberFormatException e){
+			System.out.println("Please insert a number");
+			return ;
+		}
+        System.out.println("You ordered: " + result);
     }
 }
