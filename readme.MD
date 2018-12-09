@@ -56,13 +56,14 @@ and a better final grade.
 ### Building
 The development team choose Maven as their build tool.  Maven 3.1.0 and 3.3.9
 have both been successfully used.  
-run initalize.sql in the mysql command line by typing 'source your\file\path.sql'
+
+run initalize.sql in the mysql command line by typing 'source (root install directory)\initialize.sql'
 
 
 With Maven installed, 
-	run mvn package from the root install directory
+	run 'mvn clean compile assembly:single' from the root install directory
 
 
 ## Running the Online Ordering System
-	type run.sh or start.sh in command prompt from the root install directory
+	type run.sh or start.sh in the command prompt from the root install directory
 
