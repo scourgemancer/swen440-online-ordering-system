@@ -56,6 +56,7 @@ and a better final grade.
 ### Building
 The development team choose Maven as their build tool.  Maven 3.1.0 and 3.3.9
 have both been successfully used.  
+run initalize.sql in the mysql command line by typing 'source your\file\path.sql'
 
 
 With Maven installed, 
