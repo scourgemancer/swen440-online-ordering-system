@@ -125,8 +125,10 @@ public class Controller {
      case NAME:
 	   try {
 		connection = DriverManager.getConnection(jdbcURL);
-		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
+		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
+		preparedStatement.setString(1, product);
+		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("Title");
 		}
@@ -138,8 +140,10 @@ public class Controller {
      case DESCRIPTION:
          try {
 		connection = DriverManager.getConnection(jdbcURL);
-		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
+		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
+		preparedStatement.setString(1, product);
+		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("description");
 		}
@@ -152,8 +156,10 @@ public class Controller {
      case COST:
 	   try {
 		connection = DriverManager.getConnection(jdbcURL);
-		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
+		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
+		preparedStatement.setString(1, product);
+		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("cost");
 		}
@@ -166,8 +172,10 @@ public class Controller {
      case INVENTORY:
        try {
 		connection = DriverManager.getConnection(jdbcURL);
-		statement = connection.createStatement();
-		resultSet = statement.executeQuery("select * from product WHERE Title='" + product + "'");
+		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
+		preparedStatement.setString(1, product);
+		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("item_count");
 		}
