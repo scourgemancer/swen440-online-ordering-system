@@ -338,4 +338,26 @@ public class Controller {
 	    if(connection!=null) connection.close();
 	  } catch(Exception e){}
 	}
+    public void addProduct(int sku, int count, int threshold, int amount, String title, String description, double cost, int category) {
+        try {
+            connection = DriverManager.getConnection(jdbcURL);
+            preparedStatement = connection.prepareStatement("INSERT INTO product VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement.setInt(1, sku);
+            preparedStatement.setInt(2,count);
+            preparedStatement.setInt(3, threshold);
+            preparedStatement.setInt(4, amount);
+            preparedStatement.setString(5, title);
+            preparedStatement.setString(6, description);
+            preparedStatement.setDouble(7,cost);
+            preparedStatement.setInt(8, category);
+            preparedStatement.executeUpdate();
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            close();
+        }
+    }
+
+
+
 }

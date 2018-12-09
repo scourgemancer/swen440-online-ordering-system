@@ -202,23 +202,48 @@ public class menumgr
 
         m.loadMenu(l);
         m.addMenuItem("'q' to quit");
-        System.out.println("The following supplier items are available");
+        System.out.println("The following supplier items are available for update");
         m.printMenu();
+        System.out.println("Type 'new' if you would you like to add a new product");
         String result = m.getSelection();
         try
         {
-            int iSel = Integer.parseInt(result);//Item  selected
-            currentItemName = itemList.get(iSel);
-            //currentItem = itemList.get(iSel);
-            //Now read the file and print the org.rit.swen440.presentation.items in the catalog
-            System.out.println("You want item from the catalog: " + currentItemName);
+            if (!result.equals("q") && !result.equals("new")) {
+                int iSel = Integer.parseInt(result);//Item  selected
+                currentItemName = itemList.get(iSel);
+                //currentItem = itemList.get(iSel);
+                //Now read the file and print the org.rit.swen440.presentation.items in the catalog
+                System.out.println("You want item from the catalog: " + currentItemName);
+            }
         }
         catch (Exception e)
         {
-            result = "q";
+            //result = "q";
         }
-        if (result == "q"){
+        if (result.equals("q")){
           currentLevel-=2;
+        }
+        else if (result.equals("new")){
+            System.out.println("Please enter the following item details");
+            System.out.println("Title: ");
+            String title = m.getSelection();
+            System.out.println("Description: ");
+            String description = m.getSelection();
+            System.out.println("SKU Code: ");
+            int sku = Integer.parseInt(m.getSelection());
+            System.out.println("Cost :");
+            double cost = Double.parseDouble(m.getSelection());
+            System.out.println("Item Count: ");
+            int count = Integer.parseInt(m.getSelection());
+            System.out.println("Reorder Threshold: ");
+            int threshold = Integer.parseInt(m.getSelection());
+            System.out.println("Reorder Amount: ");
+            int amount = Integer.parseInt(m.getSelection());
+            System.out.println("Enter 1 if this is an 8 track or 2 if this is a toy: ");
+            int category = Integer.parseInt(m.getSelection());
+            //call a controller funtion to insert into product table
+            //make sure to normalize category into foreign key
+            controller.addProduct(sku, count, threshold, amount, title, description, cost, category);
         }
         else
         {
