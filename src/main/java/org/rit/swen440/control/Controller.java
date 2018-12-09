@@ -363,6 +363,8 @@ public class Controller {
 		preparedStatement.setInt(1, amount);
 		preparedStatement.setString(2, name);
 		preparedStatement.executeUpdate();
+        int sku = getSkuCode(name);
+        logAction(sku, amount, "Customer", "purchase");
 	} catch(Exception e) {
 		System.err.println(e);
 	} finally {
@@ -377,14 +379,17 @@ public class Controller {
 		preparedStatement.setInt(1, amount);
 		preparedStatement.setString(2, name);
 		preparedStatement.executeUpdate();
+		int sku = getSkuCode(name);
+		logAction(sku, amount, "Supplier", "supply");
 	} catch(Exception e) {
 		System.err.println(e);
 	} finally {
 		close();
 	}
   }
-    public void addProduct(int sku, int count, int threshold, int amount, String title, String description, double cost, int category) {
+    public void addProduct(int sku, int count, int threshold, int amount, String title, String description, double cost, String category) {
         try {
+            int cat_id = getCategoryID(category);
             connection = DriverManager.getConnection(jdbcURL);
             preparedStatement = connection.prepareStatement("INSERT INTO product VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setInt(1, sku);
@@ -394,9 +399,24 @@ public class Controller {
             preparedStatement.setString(5, title);
             preparedStatement.setString(6, description);
             preparedStatement.setDouble(7,cost);
-            preparedStatement.setInt(8, category);
+            preparedStatement.setInt(8, cat_id);
             preparedStatement.executeUpdate();
-            logAction(sku, count, "Supplier", "supply");
+            logAction(sku, count, "Supplier", "create product");
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            close();
+        }
+    }
+
+    public void addCategory(String name, String description) {
+        try {
+            connection = DriverManager.getConnection(jdbcURL);
+            preparedStatement = connection.prepareStatement("INSERT INTO category VALUES (NULL, ?, ?)");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, description);
+            preparedStatement.executeUpdate();
+            logAction(-1, -1, "Supplier", "create category");
         } catch(Exception e) {
             System.err.println(e);
         } finally {
@@ -422,5 +442,41 @@ public class Controller {
         } finally {
             close();
         }
+    }
+
+    //given a product name return its SKU
+    //this is helpful when logging items
+    public int getSkuCode(String title){
+        try {
+            connection = DriverManager.getConnection(jdbcURL);
+            preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
+            preparedStatement.setString(1, title);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                return Integer.parseInt(resultSet.getString("sku_code"));
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            close();
+        }
+        return -1;
+    }
+
+    public int getCategoryID(String name){
+        try {
+            connection = DriverManager.getConnection(jdbcURL);
+            preparedStatement = connection.prepareStatement("select * from category WHERE name=?");
+            preparedStatement.setString(1, name);
+            resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                return Integer.parseInt(resultSet.getString("id"));
+            }
+        } catch(Exception e) {
+            System.err.println(e);
+        } finally {
+            close();
+        }
+        return -1;
     }
 }

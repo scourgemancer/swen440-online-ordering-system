@@ -132,6 +132,7 @@ public class menumgr
         m.addMenuItem("'q' to Quit");
         System.out.println("These are your available supplier categories");
         m.printMenu();
+        System.out.println("Type 'new category' if you would you like to add a new category");
         String result = "0";
         try
         {
@@ -144,6 +145,16 @@ public class menumgr
         if (Objects.equals(result,"q"))
         {
             currentLevel-=2;
+        }
+        else if (Objects.equals(result,"new category")){
+            System.out.println("Please enter the following category details");
+            System.out.println("Name: ");
+            String name = m.getSelection();
+            System.out.println("Description: ");
+            String description = m.getSelection();
+            //call a controller funtion to insert into category table
+            //make sure to normalize category into foreign key
+            controller.addCategory(name, description);
         }
         else
         {
@@ -204,17 +215,17 @@ public class menumgr
         m.addMenuItem("'q' to quit");
         System.out.println("The following supplier items are available for update");
         m.printMenu();
-        System.out.println("Type 'new' if you would you like to add a new product");
-		System.out.println("Type 'log' to view product logs");
+		    System.out.println("Type 'log' to view product logs");
+        System.out.println("Type 'new product' if you would you like to add a new product");
         String result = m.getSelection();
         try
         {
-            if (!result.equals("q") && !result.equals("new")) {
+            if (!result.equals("q") && !result.equals("new product")) {
                 int iSel = Integer.parseInt(result);//Item  selected
                 currentItemName = itemList.get(iSel);
                 //currentItem = itemList.get(iSel);
                 //Now read the file and print the org.rit.swen440.presentation.items in the catalog
-                System.out.println("You want item from the catalog: " + currentItemName);
+                System.out.println("You've selected: " + currentItemName);
             }
         }
         catch (Exception e)
@@ -224,7 +235,7 @@ public class menumgr
         if (result.equals("q")){
           currentLevel-=2;
         }
-        else if (result.equals("new")){
+        else if (result.equals("new product")){
             System.out.println("Please enter the following item details");
             System.out.println("Title: ");
             String title = m.getSelection();
@@ -240,8 +251,13 @@ public class menumgr
             int threshold = Integer.parseInt(m.getSelection());
             System.out.println("Reorder Amount: ");
             int amount = Integer.parseInt(m.getSelection());
-            System.out.println("Enter 1 if this is an 8 track or 2 if this is a toy: ");
-            int category = Integer.parseInt(m.getSelection());
+            System.out.println("Please enter an available category from the following list: ");
+            List<String> categories = controller.getCategories();
+            for(int i = 0; i < categories.size(); i++) {
+                System.out.println(categories.get(i));
+            }
+            System.out.println("Category: ");
+            String category = m.getSelection();
             //call a controller funtion to insert into product table
             //make sure to normalize category into foreign key
             controller.addProduct(sku, count, threshold, amount, title, description, cost, category);
@@ -286,7 +302,7 @@ public class menumgr
             int iSel = Integer.parseInt(result);//Item  selected
             currentItemName = itemList.get(iSel);
 
-            System.out.println("You want item from the catalog: " + currentItemName);
+            System.out.println("You've selected: " + currentItemName);
         }
         catch (Exception e)
         {
@@ -314,18 +330,26 @@ public class menumgr
         System.out.print(": ");
         menu m = new menu();
         String result = m.getSelection();
+        //Boolean didBuy = false;
 		try{
 			if(isSupplier){
 				controller.supplyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
+                System.out.println("You added: " + result);
 			}
-			else{
-				controller.buyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
-			}
+			else {
+                int stock = Integer.parseInt(controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.INVENTORY));
+                if (stock - Integer.parseInt(result) < 0) {
+                    System.out.println("Sorry that request exceeds available inventory.");
+                } else {
+                    controller.buyItems(Integer.parseInt(result), controller.getProductInformation(category, item, Controller.PRODUCT_FIELD.NAME));
+                    System.out.println("You ordered: " + result);
+                }
+            }
 		}
 		catch(NumberFormatException e){
 			System.out.println("Please insert a number");
 			return ;
 		}
-        System.out.println("You ordered: " + result);
+
     }
 }
