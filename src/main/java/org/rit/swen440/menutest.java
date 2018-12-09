@@ -10,7 +10,6 @@ public class menutest
     public static void main(String[] args)
     {
         try {
-            System.getProperties().load(new FileInputStream("orderSys.properties"));
             System.out.println("Welcome to Hippolyta.com!");
             menumgr mgr = new menumgr();
             int currentLevel = 0;

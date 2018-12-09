@@ -15,6 +15,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
+
 /**
  * Controls access to data, on start-up scans directories and builds internal
  * representation of categories and items within each category.  Isolates the
@@ -22,7 +30,6 @@ import java.util.stream.Collectors;
  */
 public class Controller {
   private Path dirPath;
-  private Set<Category> categories = new HashSet<>();
 
   public  enum PRODUCT_FIELD {
     NAME,
@@ -30,37 +37,17 @@ public class Controller {
     COST,
     INVENTORY
   };
+  
+  private final String jdbcDriverStr = "com.mysql.jdbc.Driver";
+  private final String jdbcURL = "jdbc:mysql://localhost/javaTestDB?user=javauser&password=javapass";
+  
+  private Connection connection;
+  private Statement statement;
+  private PreparedStatement preparedStatement;
+  private ResultSet resultSet;
 
   public Controller(String directory) {
     loadCategories(directory);
-  }
-
-  /**
-   * Load the Category information
-   *
-   * @param directory root directory
-   */
-  private void loadCategories(String directory) {
-    this.dirPath = Paths.get(directory);
-
-    DirectoryStream.Filter<Path> dirFilter = new DirectoryStream.Filter<Path>() {
-      @Override
-      public boolean accept(Path path) throws IOException {
-        return Files.isDirectory(path);
-      }
-    };
-
-    // We're just interested in directories, filter out all other files
-    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath, dirFilter)) {
-      for (Path file : stream) {
-        // get the category information from each directory
-        Optional<Category> entry = getCategory(file);
-        entry.ifPresent(categories::add);
-      }
-    } catch (IOException | DirectoryIteratorException e) {
-      // TODO:  Replace with logger
-      System.err.println(e);
-    }
   }
 
   /**
@@ -69,10 +56,20 @@ public class Controller {
    * @return list of categories
    */
   public List<String> getCategories() {
-
-    return categories.stream()
-        .map(Category::getName)
-        .collect(Collectors.toList());
+	try {
+		List<String> categories = new ArrayList<>();
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from category");
+		while(resultSet.next()) {
+			categories.add(resultSet.getString("Name"));
+		}
+		return categories;
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
   }
 
   /**
@@ -81,8 +78,18 @@ public class Controller {
    * @return description
    */
   public String getCategoryDescription(String category) {
-    Optional<Category> match = categories.stream().filter(c -> c.getName().equalsIgnoreCase(category)).findFirst();
-    return match.map(Category::getDescription).orElse(null);
+    try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from category WHERE Name='" + category + "'");
+		while(resultSet.next()) {
+			return resultSet.getString("description"));
+		}
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
   }
 
   /**
@@ -92,29 +99,79 @@ public class Controller {
    * @return List of Products in the category
    */
   public List<String> getProducts(String categoryName) {
-    Optional<Category> category = findCategory(categoryName);
-
-   return category.map(c -> c.getProducts().stream()
-              .map(Product::getTitle)
-              .collect(Collectors.toList()))
-           .orElse(null);
+    try {
+		ArrayList<String> products = new ArrayList<>();
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from product WHERE category='" + categoryName + "'");
+		while(resultSet.next()) {
+			products.add(resultSet.getString("name"));
+		}
+		return products;
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
   }
 
 
   public String getProductInformation(String category, String product, PRODUCT_FIELD field) {
-   Optional<Product> selectedProduct = getProduct(category, product);
    switch (field) {
      case NAME:
-       return selectedProduct.map(Product::getTitle).orElse(null);
-
+	   try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		while(resultSet.next()) {
+			return resultSet.getString("name"));
+		}
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
      case DESCRIPTION:
-       return selectedProduct.map(Product::getDescription).orElse(null);
+         try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		while(resultSet.next()) {
+			return resultSet.getString("description"));
+		}
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
 
      case COST:
-       return selectedProduct.map(p -> String.format("%.2f", p.getCost())).orElse(null);
+	   try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		while(resultSet.next()) {
+			return resultSet.getString("cost"));
+		}
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
 
      case INVENTORY:
-       return selectedProduct.map(p -> String.valueOf(p.getItemCount())).orElse(null);
+       try {
+		connection = DriverManager.getConnection(jdbcURL);
+		statement = connection.createStatement();
+		resultSet = statement.executeQuery("select * from product WHERE name='" + product + "'");
+		while(resultSet.next()) {
+			return resultSet.getString("item_count"));
+		}
+	} catch(Exception e) {
+		System.err.println(e);
+	} finally {
+		close();
+	}
    }
 
    return null;
@@ -265,4 +322,12 @@ public class Controller {
       System.err.println("Failed to write product file for:" + product.getTitle());
     }
   }
+  
+  private void close(){
+	try {
+	    if(resultSet!=null) resultSet.close();
+	    if(statement!=null) statement.close();
+	    if(connection!=null) connection.close();
+	  } catch(Exception e){}
+	}
 }
