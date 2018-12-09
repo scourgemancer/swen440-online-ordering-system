@@ -127,7 +127,6 @@ public class Controller {
 		connection = DriverManager.getConnection(jdbcURL);
 		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
 		preparedStatement.setString(1, product);
-		preparedStatement.executeUpdate();
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("Title");
@@ -142,7 +141,6 @@ public class Controller {
 		connection = DriverManager.getConnection(jdbcURL);
 		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
 		preparedStatement.setString(1, product);
-		preparedStatement.executeUpdate();
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("description");
@@ -158,7 +156,6 @@ public class Controller {
 		connection = DriverManager.getConnection(jdbcURL);
 		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
 		preparedStatement.setString(1, product);
-		preparedStatement.executeUpdate();
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("cost");
@@ -174,7 +171,6 @@ public class Controller {
 		connection = DriverManager.getConnection(jdbcURL);
 		preparedStatement = connection.prepareStatement("select * from product WHERE Title=?");
 		preparedStatement.setString(1, product);
-		preparedStatement.executeUpdate();
 		resultSet = preparedStatement.executeQuery();
 		while(resultSet.next()) {
 			return resultSet.getString("item_count");
